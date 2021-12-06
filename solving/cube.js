@@ -42,6 +42,9 @@ class Cube{
     }
     this.reset()
   }
+  clone(){
+    return new Cube().setState(this.getState())
+  }
   reset(){
     let edges = []
     let corners = []
@@ -171,13 +174,13 @@ class Cube{
 
     let edges = [
       [[0, 1, 0], [3, 1, 0]], [[0, 2, 1], [2, 1, 0]], [[0, 1, 2], [1, 1, 0]], [[0, 0, 1], [4, 1, 0]],
-      [[1, 2, 1], [2, 0, 1]], [[1, 2, 1], [4, 2, 1]], [[3, 0, 1], [2, 2, 1]], [[3, 2, 1], [4, 0, 1]],
+      [[1, 2, 1], [2, 0, 1]], [[1, 0, 1], [4, 2, 1]], [[3, 0, 1], [2, 2, 1]], [[3, 2, 1], [4, 0, 1]],
       [[5, 1, 0], [1, 1, 2]], [[5, 2, 1], [2, 1, 2]], [[5, 1, 2], [3, 1, 2]], [[5, 0, 1], [4, 1, 2]]
     ].map(([a, b]) => get(...a) + get(...b))
 
     let corners = [
       [[0, 0, 0], [4, 0, 0], [3, 2, 0]], [[0, 2, 0], [3, 0, 0], [2, 2, 0]], [[0, 2, 2], [2, 0, 0], [1, 2, 0]], [[0, 0, 2], [1, 0, 0], [4, 2, 0]],
-      [[5, 2, 1], [4, 2, 2], [1, 1, 0]], [[5, 2, 1], [1, 2, 2], [2, 1, 0]], [[5, 0, 1], [2, 2, 2], [3, 1, 0]], [[5, 2, 1], [3, 2, 2], [4, 1, 0]]
+      [[5, 0, 0], [4, 2, 2], [1, 0, 2]], [[5, 2, 0], [1, 2, 2], [2, 0, 2]], [[5, 2, 2], [2, 2, 2], [3, 0, 2]], [[5, 0, 2], [3, 2, 2], [4, 0, 2]]
     ].map(([a, b, c]) => get(...a) + get(...b) + get(...c))
 
     edges.forEach((edge, i) => {
@@ -189,6 +192,8 @@ class Cube{
       }
       if(index == -1){
         console.error("invalid state")
+        console.log(edge)
+        console.log(i)
         return
       }
         this.edges[i] = [index, rotation]
@@ -198,15 +203,17 @@ class Cube{
         let rotation = 0
         let index = cornerColors.indexOf(corner)
         if(index == -1){
-            index = cornerColors.indexOf(corner[1] + corners[2] + corners[0])
+            index = cornerColors.indexOf(corner[1] + corner[2] + corner[0])
             rotation = 1
         }
         if(index == -1){
-            index = cornerColors.indexOf(corner[2] + corners[0] + corners[1])
+            index = cornerColors.indexOf(corner[2] + corner[0] + corner[1])
             rotation = 2
         }
         if(index == -1){
             console.error("invalid state")
+            console.log(corner)
+            console.log(i)
             return
         }
         this.corners[i] = [index, rotation]
